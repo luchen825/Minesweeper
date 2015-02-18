@@ -1,16 +1,15 @@
 
 
 import de.bezier.guido.*;
-public final static int NUM_ROWS = 20;
-public final static int NUM_COLS = 20;
+public final static int NUM_ROWS = 30;
+public final static int NUM_COLS = 30;
 private MSButton[][] buttons; //2d array of minesweeper buttons
-private ArrayList <MSButton> bombs = new ArrayList <MSButton>();
- //ArrayList of just the minesweeper buttons that are mined
+private ArrayList <MSButton> bombs = new ArrayList <MSButton>();//ArrayList of just the minesweeper buttons that are mined
 public boolean gameover = false;
 
 public void setup ()
 {
-    size(400, 400);
+    size(600, 600);
     textAlign(CENTER,CENTER);
     
     // make the manager
@@ -29,7 +28,7 @@ public void setup ()
 }
 public void setBombs()
 {
-    while(bombs.size() < 40)
+    while(bombs.size() < 60)
     {
         int row = (int)(Math.random()*NUM_ROWS);
         int col = (int)(Math.random()*NUM_COLS);
@@ -48,16 +47,38 @@ public void draw ()
 }
 public boolean isWon()
 {
-    //your code here
-    return false;
+    for(int r=0; r < NUM_ROWS; r++)
+    {
+        for(int c=0; c < NUM_COLS; c++)
+        {
+            if(!buttons[r][c].isClicked() && !buttons[r][c].isMarked())
+            {
+                return false;
+            }
+        }
+    }
+    return true;
 }
 public void displayLosingMessage()
 {
-    //your code here
+    gameover = true;
+    for(int r=0; r < NUM_ROWS; r++)
+    {
+        for(int c=0; c < NUM_COLS; c++)
+        {
+            if(bombs.contains(buttons[r][c]))
+            {
+                buttons[r][c].setLabel("B");
+            }
+        }
+    }
+    //textAlign(CENTER);
+    //textSize(24);
+    //text("GAMEOVER D;",30,30);
 }
 public void displayWinningMessage()
 {
-    //your code here
+    buttons[10][10].setLabel("YOU WIN! YAYY!");
 }
 
 public class MSButton
@@ -69,8 +90,8 @@ public class MSButton
     
     public MSButton ( int rr, int cc )
     {
-        width = 400/NUM_COLS;
-        height = 400/NUM_ROWS;
+        width = 600/NUM_COLS;
+        height = 600/NUM_ROWS;
         r = rr;
         c = cc; 
         x = c*width;
@@ -96,12 +117,12 @@ public class MSButton
         {
             marked = !marked;
             //gotta fix this
-            if(countBombs(r,c) == 0)
+            if(countBombs(r,c) == 0 || bombs.contains(this))
             {
                 clicked = !clicked;
             }
         }
-        else if(bombs.contains(this))
+        else if(bombs.contains(this) && !marked)
         {
             gameover = true;
             displayLosingMessage();
@@ -151,7 +172,7 @@ public class MSButton
     {    
         if (marked)
             fill(0);
-        else if( clicked && bombs.contains(this) ) 
+        else if(clicked && bombs.contains(this)) 
             fill(255,0,0);
         else if(clicked)
             fill(200);
