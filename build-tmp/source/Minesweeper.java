@@ -46,7 +46,7 @@ public void setup ()
 }
 public void setBombs()
 {
-    while(bombs.size() < 60)
+    while(bombs.size() < 50)
     {
         int row = (int)(Math.random()*NUM_ROWS);
         int col = (int)(Math.random()*NUM_COLS);
@@ -69,7 +69,7 @@ public boolean isWon()
     {
         for(int c=0; c < NUM_COLS; c++)
         {
-            if(!buttons[r][c].isClicked() && !buttons[r][c].isMarked())
+            if(!buttons[r][c].isClicked() && !bombs.contains(buttons[r][c]))
             {
                 return false;
             }
@@ -90,13 +90,21 @@ public void displayLosingMessage()
             }
         }
     }
-    //textAlign(CENTER);
-    //textSize(24);
-    //text("GAMEOVER D;",30,30);
+    String blah = new String("GAME OVER!");
+    for(int i=0; i < blah.length(); i++)
+    {
+        buttons[15][10+i].setLabel(blah.substring(i,i+1));
+        fill(0,0,255);
+    } 
+
 }
 public void displayWinningMessage()
 {
-    buttons[10][10].setLabel("YOU WIN! YAYY!");
+    String blah = new String("YOU WIN!");
+    for(int i=0; i < blah.length(); i++)
+    {
+        buttons[15][11+i].setLabel(blah.substring(i,i+1));
+    }  
 }
 
 public class MSButton
@@ -130,15 +138,14 @@ public class MSButton
     
     public void mousePressed () 
     {
-        clicked = true;
-        if(mouseButton == RIGHT)
+        if(gameover || isWon()) return;
+        if(mouseButton == LEFT)
+        {
+            clicked = true;
+        }
+        if(mouseButton == RIGHT && !isClicked())
         {
             marked = !marked;
-            //gotta fix this
-            if(countBombs(r,c) == 0 || bombs.contains(this))
-            {
-                clicked = !clicked;
-            }
         }
         else if(bombs.contains(this) && !marked)
         {
@@ -148,7 +155,6 @@ public class MSButton
         else if(countBombs(r,c) > 0)
         {
             label = "" + countBombs(r,c);
-            clicked = true;
         }
         else
         {
