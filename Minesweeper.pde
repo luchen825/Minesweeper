@@ -75,6 +75,7 @@ public void displayLosingMessage()
     String blah = new String("GAME OVER!");
     for(int i=0; i < blah.length(); i++)
     {
+        buttons[15][10+i].end = true;
         buttons[15][10+i].setLabel(blah.substring(i,i+1));
     } 
 
@@ -84,6 +85,7 @@ public void displayWinningMessage()
     String blah = new String("YOU WIN!");
     for(int i=0; i < blah.length(); i++)
     {
+        buttons[15][10+i].end = true;
         buttons[15][11+i].setLabel(blah.substring(i,i+1));
     }  
 }
@@ -92,7 +94,7 @@ public class MSButton
 {
     private int r, c;
     private float x,y, width, height;
-    private boolean clicked, marked;
+    private boolean clicked, marked, end;
     private String label;
     
     public MSButton ( int rr, int cc )
@@ -104,7 +106,7 @@ public class MSButton
         x = c*width;
         y = r*height;
         label = "";
-        marked = clicked = false;
+        marked = clicked = end = false;
         Interactive.add( this ); // register it with the manager
     }
     public boolean isMarked()
@@ -183,7 +185,8 @@ public class MSButton
             fill(200);
         else 
             fill(100);
-
+        if(end)
+            fill(0,255,255);
         rect(x, y, width, height);
         fill(0);
         text(label,x+width/2,y+height/2);
