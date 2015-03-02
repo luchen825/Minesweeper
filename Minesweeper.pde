@@ -85,7 +85,7 @@ public void displayWinningMessage()
     String blah = new String("YOU WIN!");
     for(int i=0; i < blah.length(); i++)
     {
-        buttons[15][10+i].end = true;
+        buttons[15][11+i].end = true;
         buttons[15][11+i].setLabel(blah.substring(i,i+1));
     }  
 }
